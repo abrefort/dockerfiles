@@ -3,7 +3,7 @@ MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 # install java
 RUN apt-get update
-RUN apt-get install -y -q wget openjdk-7-jre
+RUN apt-get install -y -q wget openjdk-7-jre-headless
 
 # create elasticsearch user
 RUN useradd -m elasticsearch
