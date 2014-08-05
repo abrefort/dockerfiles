@@ -25,3 +25,32 @@ Start logstash and kibana :
 sudo docker run -d --name metro_logstash1 --link metro_es1:es -p 127.0.0.1:25826:25826/udp adrien/logstash:collectd
 sudo docker run -d --name metro_kibana1 --link metro_es2:es -p 81:80 adrien/nginx:kibana
 ```
+
+# InfluxDB/Grafana for collectd
+
+**Note** : Docker should be started with --icc=false.
+
+Setup influxdb data volume containers :
+
+```bash
+sudo docker run --name metro_influxdb1_data -d adrien/influxdb:data
+sudo docker run --name metro_influxdb2_data -d adrien/influxdb:data
+```
+
+Start influxdb containers and connect them to br2 :
+
+```bash
+sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name metro_influxdb1 --volumes-from metro_influxdb1_data -p 8083:8083 -p 8086:8086 adrien/influxdb:graphite_cluster
+sudo docker run -d -e "CLUSTER_IP=10.0.0.2" -e "SEED_SERVER_DOCKER=10.0.0.1:8090" --name metro_influxdb2 --volumes-from metro_influxdb2_data adrien/influxdb:graphite_cluster
+
+sudo pipework br2 metro_influxdb1 10.0.0.1/24
+sudo pipework br2 metro_influxdb2 10.0.0.2/24
+```
+
+**Note** : InfluxDB root password should be modified and users and databases (graphite and grafana) configured by using metro_influxdb1 admin interface. (http://myhost:8086)
+
+Start grafana :
+
+```bash
+sudo docker run -d --name metro_grafana1 --link metro_influxdb2:influxdb -p 81:80 -e "GRAPHITE_DB_USER=user" -e "GRAFANA_DB_USER=user" -e "GRAPHITE_DB_PASSWORD=password" -e "GRAFANA_DB_PASSWORD=password" adrien/nginx:grafana
+```
