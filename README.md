@@ -23,7 +23,7 @@ Start logstash and kibana :
 
 ```bash
 sudo docker run -d --name metro_logstash1 --link metro_es1:es -p 127.0.0.1:25826:25826/udp adrien/logstash:collectd
-sudo docker run -d --name metro_kibana1 --link metro_es2:es -p 81:80 adrien/nginx:kibana
+sudo docker run -d --name metro_kibana1 -e "HTPASSWD_USER=user" -e "HTPASSWD_PASSWORD=password" --link metro_es2:es -p 81:80 adrien/nginx:kibana
 ```
 
 # InfluxDB/Grafana for collectd
@@ -52,5 +52,5 @@ sudo pipework br2 metro_influxdb2 10.0.0.2/24
 Start grafana :
 
 ```bash
-sudo docker run -d --name metro_grafana1 --link metro_influxdb2:influxdb -p 81:80 -e "GRAPHITE_DB_USER=user" -e "GRAFANA_DB_USER=user" -e "GRAPHITE_DB_PASSWORD=password" -e "GRAFANA_DB_PASSWORD=password" adrien/nginx:grafana
+sudo docker run -d --name metro_grafana1 --link metro_influxdb2:influxdb -p 81:80 -e "GRAPHITE_DB_USER=user" -e "GRAFANA_DB_USER=user" -e "GRAPHITE_DB_PASSWORD=password" -e "GRAFANA_DB_PASSWORD=password" -e "HTPASSWD_USER=user" -e "HTPASSWD_PASSWORD=password" adrien/nginx:grafana
 ```
