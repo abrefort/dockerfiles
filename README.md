@@ -40,7 +40,7 @@ sudo docker run --name metro_influxdb2_data -d abrefort/influxdb:data
 Start influxdb containers and connect them to br2 :
 
 ```bash
-sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name metro_influxdb1 --volumes-from metro_influxdb1_data -p 8083:8083 -p 8086:8086 abrefort/influxdb:graphite_cluster
+sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name metro_influxdb1 --volumes-from metro_influxdb1_data -p 8083:8083 -p 8086:8086 -p 127.0.0.1:2003:2003 abrefort/influxdb:graphite_cluster
 sudo docker run -d -e "CLUSTER_IP=10.0.0.2" -e "SEED_SERVER_DOCKER=10.0.0.1:8090" --name metro_influxdb2 --volumes-from metro_influxdb2_data abrefort/influxdb:graphite_cluster
 
 sudo pipework br2 metro_influxdb1 10.0.0.1/24
