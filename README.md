@@ -5,8 +5,8 @@
 Setup elastic search data volume containers :
 
 ```bash
-sudo docker run --name metro_es1_data -d abrefort/elasticsearch_data
-sudo docker run --name metro_es2_data -d abrefort/elasticsearch_data
+sudo docker run --name metro_es1_data -d abrefort/elasticsearch:data
+sudo docker run --name metro_es2_data -d abrefort/elasticsearch:data
 ```
 
 Start elasticsearch containers and connect them to br1 :
