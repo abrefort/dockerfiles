@@ -1,4 +1,4 @@
-FROM adrien/nginx
+FROM abrefort/nginx
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 # install grafana

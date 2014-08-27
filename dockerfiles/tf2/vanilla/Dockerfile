@@ -1,4 +1,4 @@
-FROM adrien/tf2:base
+FROM abrefort/tf2:base
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 ADD server.cfg /home/steam/tf2_server/tf/cfg/server.cfg

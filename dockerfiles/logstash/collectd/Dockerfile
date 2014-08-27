@@ -1,4 +1,4 @@
-FROM adrien/logstash
+FROM abrefort/logstash
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 USER logstash

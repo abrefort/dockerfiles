@@ -1,4 +1,4 @@
-FROM adrien/elasticsearch
+FROM abrefort/elasticsearch
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 EXPOSE 9200

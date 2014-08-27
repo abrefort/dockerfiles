@@ -1,4 +1,4 @@
-FROM adrien/steam
+FROM abrefort/steam
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 WORKDIR /home/steam
