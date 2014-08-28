@@ -1,3 +1,31 @@
+# Basic ELK with syslog udp input
+
+**Note** : Docker should be started with --icc=false.
+
+Setup elastic search data volume containers :
+
+```bash
+sudo docker run --name syslog_es1_data -d abrefort/elasticsearch:data
+sudo docker run --name syslog_es2_data -d abrefort/elasticsearch:data
+```
+
+Start elasticsearch containers and connect them to br1 :
+
+```bash
+sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name syslog_es1 --volumes-from syslog_es1_data  abrefort/elasticsearch:cluster
+sudo docker run -d -e "CLUSTER_IP=10.0.0.2" --name syslog_es2 --volumes-from syslog_es2_data  abrefort/elasticsearch:cluster
+
+sudo pipework br1 metro_es1 10.0.0.1/24
+sudo pipework br1 metro_es2 10.0.0.2/24
+```
+
+Start logstash and kibana :
+
+```bash
+sudo docker run -d --name syslog_logstash1 --link syslog_es1:es -p 127.0.0.1:10514:10514/udp abrefort/logstash:syslog
+sudo docker run -d --name syslog_kibana1 -e "HTPASSWD_USER=user" -e "HTPASSWD_PASSWORD=password" --link syslog_es2:es -p 81:80 abrefort/nginx:kibana
+```
+
 # ELK for collectd
 
 **Note** : Docker should be started with --icc=false.
