@@ -15,8 +15,8 @@ Start elasticsearch containers and connect them to br1 :
 sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name syslog_es1 --volumes-from syslog_es1_data  abrefort/elasticsearch:cluster
 sudo docker run -d -e "CLUSTER_IP=10.0.0.2" --name syslog_es2 --volumes-from syslog_es2_data  abrefort/elasticsearch:cluster
 
-sudo pipework br1 metro_es1 10.0.0.1/24
-sudo pipework br1 metro_es2 10.0.0.2/24
+sudo pipework br1 syslog_es1 10.0.0.1/24
+sudo pipework br1 syslog_es2 10.0.0.2/24
 ```
 
 Start logstash and kibana :
