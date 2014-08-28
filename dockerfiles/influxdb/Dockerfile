@@ -17,7 +17,7 @@ EXPOSE 8099
 USER influxdb
 WORKDIR /home/influxdb
 
-RUN wget https://s3.amazonaws.com/influxdb/influxdb-latest.amd64.tar.gz -O - | tar --strip 1 -x -z -f -
+RUN wget https://s3.amazonaws.com/influxdb/influxdb-0.7.3.amd64.tar.gz -O - | tar --strip 1 -x -z -f -
 
 CMD []
 ENTRYPOINT ["/bin/bash"]
