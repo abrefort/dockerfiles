@@ -56,7 +56,7 @@ sudo docker run -d --name metro_kibana1 -e "HTPASSWD_USER=user" -e "HTPASSWD_PAS
 
 # InfluxDB/Grafana for collectd
 
-**Note** : Docker should be started with --icc=false.
+**Note** : Docker should be started with --icc=false. Weave is required.
 
 Setup influxdb data volume containers :
 
@@ -65,14 +65,22 @@ sudo docker run --name metro_influxdb1_data -d abrefort/influxdb:data
 sudo docker run --name metro_influxdb2_data -d abrefort/influxdb:data
 ```
 
-Start influxdb containers and connect them to br2 :
+Start influxdb containers and weave on first host :
 
 ```bash
-sudo docker run -d -e "CLUSTER_IP=10.0.0.1" --name metro_influxdb1 --volumes-from metro_influxdb1_data -p 8083:8083 -p 8086:8086 -p 127.0.0.1:2003:2003 abrefort/influxdb:graphite_cluster
-sudo docker run -d -e "CLUSTER_IP=10.0.0.2" -e "SEED_SERVER_DOCKER=10.0.0.1:8090" --name metro_influxdb2 --volumes-from metro_influxdb2_data abrefort/influxdb:graphite_cluster
+sudo weave 10.0.0.1/16
 
-sudo pipework br2 metro_influxdb1 10.0.0.1/24
-sudo pipework br2 metro_influxdb2 10.0.0.2/24
+sudo weave run 10.0.1.1/24 -d -e "CLUSTER_IP=10.0.1.1" --name metro_influxdb1 --volumes-from metro_influxdb1_data -p 8083:8083 -p 8086:8086 -p 127.0.0.1:2003:2003 abrefort/influxdb:graphite_cluster
+sudo weave run 10.0.1.2/24 -d -e "CLUSTER_IP=10.0.1.2" -e "SEED_SERVER_DOCKER=10.0.1.1:8090" --name metro_influxdb2 --volumes-from metro_influxdb2_data abrefort/influxdb:graphite_cluster
+```
+
+Start influxdb container and weave on second host :
+
+```bash
+sudo weave 10.0.0.2/16
+
+sudo docker run --name metro_influxdb3_data -d abrefort/influxdb:data
+sudo weave run 10.0.1.3/24 -d -e "CLUSTER_IP=10.0.1.3" -e "SEED_SERVER_DOCKER=10.0.1.1:8090" --name metro_influxdb3 --volumes-from metro_influxdb2_data abrefort/influxdb:graphite_cluster
 ```
 
 **Note** : InfluxDB root password should be modified and users and databases (graphite and grafana) configured by using metro_influxdb1 admin interface. (http://myhost:8086)
@@ -80,5 +88,5 @@ sudo pipework br2 metro_influxdb2 10.0.0.2/24
 Start grafana :
 
 ```bash
-sudo docker run -d --name metro_grafana1 --link metro_influxdb2:influxdb -p 81:80 -e "GRAPHITE_DB_USER=user" -e "GRAFANA_DB_USER=user" -e "GRAPHITE_DB_PASSWORD=password" -e "GRAFANA_DB_PASSWORD=password" -e "HTPASSWD_USER=user" -e "HTPASSWD_PASSWORD=password" abrefort/nginx:grafana
+sudo weave run 10.0.1.11/24 -d --name metro_grafana1 -p 81:80 -e "INFLUXDB_IP=10.0.1.1" -e "GRAPHITE_DB_USER=user" -e "GRAFANA_DB_USER=user" -e "GRAPHITE_DB_PASSWORD=password" -e "GRAFANA_DB_PASSWORD=password" -e "HTPASSWD_USER=user" -e "HTPASSWD_PASSWORD=password" abrefort/nginx:grafana
 ```
