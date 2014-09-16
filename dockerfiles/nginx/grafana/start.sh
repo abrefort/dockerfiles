@@ -11,6 +11,4 @@ sed -i -e "s/graphite_db_user/$GRAPHITE_DB_USER/" \
        -e "s/grafana_db_password/$GRAFANA_DB_PASSWORD/" \
 /srv/www/config.js
 
-sed -i -e "s/influxdb_ip/$INFLUXDB_IP/" /etc/nginx/sites-enabled/default
-
 nginx

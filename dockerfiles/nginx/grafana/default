@@ -25,7 +25,7 @@ server {
   }
 
   location ~ ^/db/ {
-    proxy_pass http://influxdb_ip:8086;
+    proxy_pass http://influxdb:8086;
     proxy_read_timeout 90;
   }
 }
