@@ -23,13 +23,13 @@ function (Settings) {
     datasources: {
       influxdb: {
         type: 'influxdb',
-        url: "http://"+window.location.hostname+":"+window.location.port+"/db/graphite",
+        url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/db/graphite",
         username: 'graphite_db_user',
         password: 'graphite_db_password',
       },
       grafana: {
         type: 'influxdb',
-        url: "http://"+window.location.hostname+":"+window.location.port+"/db/grafana",
+        url: window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/db/grafana",
         username: 'grafana_db_user',
         password: 'grafana_db_password',
         grafanaDB: true
