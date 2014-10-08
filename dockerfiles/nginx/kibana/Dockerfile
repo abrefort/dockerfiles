@@ -2,8 +2,7 @@ FROM abrefort/nginx
 MAINTAINER Adrien Bréfort <adrien@padisha.org>
 
 # install kibana
-RUN apt-get update
-RUN apt-get install -q -y wget ca-certificates apache2-utils
+RUN apt-get update && apt-get install -q -y wget ca-certificates apache2-utils
 
 WORKDIR /srv/www
 RUN wget https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz -O - | tar --strip 1 -x -z -f -
