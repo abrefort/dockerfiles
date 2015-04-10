@@ -5,7 +5,7 @@ MAINTAINER Adrien Bréfort <adrien@padisha.org>
 RUN apt-get update && apt-get install -q -y wget ca-certificates apache2-utils
 
 WORKDIR /srv/www
-RUN wget https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz -O - | tar --strip 1 -x -z -f -
+RUN wget https://download.elasticsearch.org/kibana/kibana/kibana-3.1.2.tar.gz -O - | tar --strip 1 -x -z -f -
 
 ADD config.js /srv/www/config.js
 ADD nginx.conf /etc/nginx/nginx.conf
